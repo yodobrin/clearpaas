@@ -2,12 +2,16 @@
 from bson import ObjectId # For ObjectId to work
 from pymongo import MongoClient
 import os
+import config
 
+MONGOURL = config.settings['MONGOURL']
+MONGO_USERNAME = config.settings['MONGO_USERNAME']
+MONGO_PASSWORD = config.settings['MONGO_PASSWORD']
 
 ## Comment out when running locally
-client = MongoClient(os.getenv("MONGOURL"))
+client = MongoClient(MONGOURL)
 db = client.test    #Select the database
-db.authenticate(name=os.getenv("MONGO_USERNAME"),password=os.getenv("MONGO_PASSWORD"))
+db.authenticate(name=MONGO_USERNAME,password=MONGO_PASSWORD)
 todos = db.todo #Select the collection
 
 def lists_all():
@@ -21,8 +25,8 @@ def addTask (aName,aDesc,aDate,aPr):
 	date=aDate
 	pr=aPr
 	key = todos.insert({ "name":name, "desc":desc, "date":date, "pr":pr, "done":"no"})
-  print("added task:"+key)
-  return key
+	print("added task:"+key)
+	return key
 
   
 
@@ -30,11 +34,6 @@ def remove (key):
 	todos.remove({"_id":ObjectId(key)})
 	return redirect("/")
   
-def redirect_url():
-    return request.args.get('next') or \
-           request.referrer or \
-           url_for('index')
-
 
 def run_sample():
   lists_all()
