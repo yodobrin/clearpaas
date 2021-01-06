@@ -2,7 +2,7 @@ import azure.cosmos.cosmos_client as cosmos_client
 import azure.cosmos.exceptions as exceptions
 from azure.cosmos.partition_key import PartitionKey
 import datetime
-
+import azure.cosmos.documents as documents
 import config
 
 # ----------------------------------------------------------------------------------------------------------
@@ -88,6 +88,9 @@ def replace_item(container, doc_id):
     print('Replaced Item\'s Id is {0}, new subtotal={1}'.format(response['id'], response['subtotal']))
 
 
+
+
+
 def upsert_item(container, doc_id):
     print('\n1.6 Upserting an item\n')
 
@@ -157,18 +160,20 @@ def get_sales_order_v2(item_id):
     return order2
 
 def run_sample():
+    print("trying to connect")
     client = cosmos_client.CosmosClient(HOST, {'masterKey': MASTER_KEY} )
+    print("connected")
     try:
         # setup database for this sample
         try:
-            db = client.create_database(id=DATABASE_ID)
+            db = client.create_database_if_not_exists(id=DATABASE_ID)
 
         except exceptions.CosmosResourceExistsError:
             pass
 
         # setup container for this sample
         try:
-            container = db.create_container(id=CONTAINER_ID, partition_key=PartitionKey(path='/id', kind='Hash'))
+            container = db.create_container_if_not_exists(id=CONTAINER_ID, partition_key=PartitionKey(path='/id', kind='Hash'))
             print('Container with id \'{0}\' created'.format(CONTAINER_ID))
 
         except exceptions.CosmosResourceExistsError:
