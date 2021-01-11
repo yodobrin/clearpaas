@@ -6,5 +6,6 @@ settings = {
     'database_id': os.environ.get('COSMOS_DATABASE', '[DB NAME]'),
     'container_id': os.environ.get('COSMOS_CONTAINER', '[CONTAINER NAME]]'),
     'kv_name': os.environ.get('KV_NAME', '[YOUR KEYVAULT NAME ]'),
-    'secret_name': os.environ.get('SECRET_NAME', '[YOUR SECRET]')
+    'secret_name': os.environ.get('SECRET_NAME', '[YOUR SECRET]'),
+    'logs_ins_key': os.environ.get('LOG_INSTRUMENTATION_KEY', '[YOUR INST KEY]')
 }
